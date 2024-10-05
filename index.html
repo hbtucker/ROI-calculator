@@ -166,7 +166,7 @@
             const [bureaucraticActivities, setBureaucraticActivities] = useState(20);
             const [improvementOpportunities, setImprovementOpportunities] = useState(10);
             const [averageSalary, setAverageSalary] = useState(70000);
-            const [improvementInvestment, setImprovementInvestment] = useState(10000);
+            const [improvementInvestment, setImprovementInvestment] = useState(20000);
 
             const [roi, setRoi] = useState(0);
             const [savings, setSavings] = useState(0);
@@ -369,7 +369,7 @@
                                     <div>
                                         <div className="result-item">
                                             <p className="result-label">ROI</p>
-                                            <p className="result-value">{roi.toFixed(2)}%</p>
+                                            <p className="result-value">{roi.toFixed(0)}%</p>
                                         </div>
                                         <div className="result-item">
                                             <p className="result-label">Savings</p>
