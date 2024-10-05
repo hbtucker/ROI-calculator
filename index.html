@@ -157,8 +157,8 @@
         function ROICalculator() {
             const [employees, setEmployees] = useState(100);
             const [operationalCosts, setOperationalCosts] = useState(1000000);
-            const [wastedEfforts, setWastedEfforts] = useState(15);
-            const [engagementIncrease, setEngagementIncrease] = useState(10);
+            const [bureaucracy, setWastedEfforts] = useState(15);
+            const [improvementIncrease, setImprovementIncrease] = useState(10);
 
             const [roi, setRoi] = useState(0);
             const [savings, setSavings] = useState(0);
@@ -168,8 +168,8 @@
             const chartInstance = useRef(null);
 
             const calculateROI = useCallback(() => {
-                const totalWaste = operationalCosts * (wastedEfforts / 100);
-                const potentialSavings = totalWaste * (engagementIncrease / 100);
+                const totalWaste = operationalCosts * (bureaucracy / 100);
+                const potentialSavings = totalWaste * (improvementIncrease / 100);
                 const annualCost = employees * 100; // Assuming $100 per employee per year
                 
                 const annualSavings = potentialSavings;
@@ -183,13 +183,13 @@
                     chartInstance.current.data.datasets[0].data = [annualSavings, annualCost];
                     chartInstance.current.update();
                 }
-            }, [employees, operationalCosts, wastedEfforts, engagementIncrease]);
+            }, [employees, operationalCosts, bureaucracy, improvementIncrease]);
 
             const debouncedCalculateROI = useCallback(debounce(calculateROI, 500), [calculateROI]);
 
             useEffect(() => {
                 debouncedCalculateROI();
-            }, [employees, operationalCosts, wastedEfforts, engagementIncrease, debouncedCalculateROI]);
+            }, [employees, operationalCosts, bureaucracy, improvementIncrease, debouncedCalculateROI]);
 
             useEffect(() => {
                 if (chartInstance.current) {
@@ -260,7 +260,7 @@
                         <div className="card-content">
                             <div className="grid">
                                 <div className="input-group">
-                                    <label htmlFor="employees" className="label">Number of Employees: {employees}</label>
+                                    <label htmlFor="employees" className="label">Company Size: {employees}</label>
                                     <input
                                         type="range"
                                         id="employees"
@@ -297,38 +297,38 @@
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="wastedEfforts" className="label">Estimated Wasted Efforts: {wastedEfforts}%</label>
+                                    <label htmlFor="bureaucracy" className="label">Estimated Bureaucracy*: {bureaucracy}%</label>
                                     <input
                                         type="range"
-                                        id="wastedEfforts"
+                                        id="bureaucracy"
                                         min="0"
                                         max="100"
-                                        value={wastedEfforts}
+                                        value={bureaucracy}
                                         onChange={handleInputChange(setWastedEfforts)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
-                                        value={wastedEfforts}
+                                        value={bureaucracy}
                                         onChange={handleInputChange(setWastedEfforts)}
                                         className="input"
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="engagementIncrease" className="label">Expected Engagement Increase: {engagementIncrease}%</label>
+                                    <label htmlFor="improvementIncrease" className="label">Expected Improvement Increase: {improvementIncrease}%</label>
                                     <input
                                         type="range"
-                                        id="engagementIncrease"
+                                        id="improvementIncrease"
                                         min="0"
                                         max="100"
-                                        value={engagementIncrease}
-                                        onChange={handleInputChange(setEngagementIncrease)}
+                                        value={improvementIncrease}
+                                        onChange={handleInputChange(setImprovementIncrease)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
-                                        value={engagementIncrease}
-                                        onChange={handleInputChange(setEngagementIncrease)}
+                                        value={improvementIncrease}
+                                        onChange={handleInputChange(setImprovementIncrease)}
                                         className="input"
                                     />
                                 </div>
