@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.1.12/umd/Recharts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn {
+                @apply bg-[#ffc433] text-[#191919] hover:bg-[#e6b02e] px-8 py-3 text-lg font-semibold rounded-md transition-colors duration-200;
+            }
+            .input {
+                @apply w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#ffc433];
+            }
+            .label {
+                @apply block text-sm font-medium text-gray-700 mb-1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#f6f6f6] font-poppins">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } = Recharts;
+
+        function ROICalculator() {
+            const [employees, setEmployees] = useState(100);
+            const [operationalCosts, setOperationalCosts] = useState(1000000);
+            const [wastedEfforts, setWastedEfforts] = useState(15);
+            const [engagementIncrease, setEngagementIncrease] = useState(10);
+
+            const [roi, setRoi] = useState(0);
+            const [savings, setSavings] = useState(0);
+            const [cost, setCost] = useState(0);
+
+            useEffect(() => {
+                const calculateROI = () => {
+                    const totalWaste = operationalCosts * (wastedEfforts / 100);
+                    const potentialSavings = totalWaste * (engagementIncrease / 100);
+                    const annualCost = employees * 100; // Assuming $100 per employee per year
+                    
+                    const annualSavings = potentialSavings;
+                    const annualROI = (annualSavings - annualCost) / annualCost * 100;
+
+                    setRoi(annualROI);
+                    setSavings(annualSavings);
+                    setCost(annualCost);
+                };
+
+                calculateROI();
+            }, [employees, operationalCosts, wastedEfforts, engagementIncrease]);
+
+            const chartData = [
+                { name: 'Savings', value: savings },
+                { name: 'Cost', value: cost },
+            ];
+
+            const COLORS = ['#ffc433', '#191919'];
+
+            const formatCurrency = (value) => {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                }).format(value);
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center p-4">
+                    <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
+                        <div className="bg-[#191919] text-white p-6">
+                            <h1 className="text-3xl font-bold">ROI Calculator</h1>
+                            <p className="text-[#ffc433]">Calculate your potential return on investment</p>
+                        </div>
+                        <div className="p-6 space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label htmlFor="employees" className="label">Number of Employees: {employees}</label>
+                                    <input
+                                        type="range"
+                                        id="employees"
+                                        min="1"
+                                        max="10000"
+                                        value={employees}
+                                        onChange={(e) => setEmployees(Number(e.target.value))}
+                                        className="w-full"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={employees}
+                                        onChange={(e) => setEmployees(Number(e.target.value))}
+                                        className="input mt-2"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="operationalCosts" className="label">Operational Costs: ${operationalCosts.toLocaleString()}</label>
+                                    <input
+                                        type="range"
+                                        id="operationalCosts"
+                                        min="10000"
+                                        max="10000000"
+                                        step="10000"
+                                        value={operationalCosts}
+                                        onChange={(e) => setOperationalCosts(Number(e.target.value))}
+                                        className="w-full"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={operationalCosts}
+                                        onChange={(e) => setOperationalCosts(Number(e.target.value))}
+                                        className="input mt-2"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="wastedEfforts" className="label">Estimated Wasted Efforts: {wastedEfforts}%</label>
+                                    <input
+                                        type="range"
+                                        id="wastedEfforts"
+                                        min="0"
+                                        max="100"
+                                        value={wastedEfforts}
+                                        onChange={(e) => setWastedEfforts(Number(e.target.value))}
+                                        className="w-full"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={wastedEfforts}
+                                        onChange={(e) => setWastedEfforts(Number(e.target.value))}
+                                        className="input mt-2"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="engagementIncrease" className="label">Expected Engagement Increase: {engagementIncrease}%</label>
+                                    <input
+                                        type="range"
+                                        id="engagementIncrease"
+                                        min="0"
+                                        max="100"
+                                        value={engagementIncrease}
+                                        onChange={(e) => setEngagementIncrease(Number(e.target.value))}
+                                        className="w-full"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={engagementIncrease}
+                                        onChange={(e) => setEngagementIncrease(Number(e.target.value))}
+                                        className="input mt-2"
+                                    />
+                                </div>
+                            </div>
+                            <div className="bg-[#191919] text-white p-6 rounded-lg">
+                                <h3 className="text-2xl font-bold mb-4">Your ROI</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                    <div className="h-80 md:h-96">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie
+                                                    data={chartData}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    innerRadius={60}
+                                                    outerRadius={80}
+                                                    fill="#8884d8"
+                                                    paddingAngle={5}
+                                                    dataKey="value"
+                                                    label={({ cx, cy, midAngle, innerRadius, outerRadius, value, index }) => {
+                                                        const RADIAN = Math.PI / 180;
+                                                        const radius = 25 + innerRadius + (outerRadius - innerRadius);
+                                                        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                                                        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+                                                        return (
+                                                            <text
+                                                                x={x}
+                                                                y={y}
+                                                                fill="#fff"
+                                                                textAnchor={x > cx ? 'start' : 'end'}
+                                                                dominantBaseline="central"
+                                                            >
+                                                                {formatCurrency(value)}
+                                                            </text>
+                                                        );
+                                                    }}
+                                                >
+                                                    {chartData.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip />
+                                                <Legend />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div>
+                                        <div className="mb-4">
+                                            <p className="text-[#ffc433] font-bold">Annual ROI</p>
+                                            <p className="text-3xl font-bold">{roi.toFixed(2)}%</p>
+                                        </div>
+                                        <div className="mb-4">
+                                            <p className="text-[#ffc433] font-bold">Annual Savings</p>
+                                            <p className="text-3xl font-bold">{formatCurrency(savings)}</p>
+                                        </div>
+                                        <button
+                                            className="btn w-full mt-4"
+                                            onClick={() => window.location.href = 'mailto:contact@example.com?subject=ROI%20Calculator%20Inquiry'}
+                                        >
+                                            Connect
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ROICalculator />, document.getElementById('root'));
+    </script>
+</body>
+</html>
