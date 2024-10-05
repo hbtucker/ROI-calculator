@@ -127,6 +127,13 @@
         .btn:hover {
             background-color: #e6b02e;
         }
+        .link {
+            color: #ffc433;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
         @media (min-width: 768px) {
             .grid {
                 display: grid;
@@ -156,40 +163,39 @@
 
         function ROICalculator() {
             const [employees, setEmployees] = useState(100);
-            const [operationalCosts, setOperationalCosts] = useState(1000000);
-            const [bureaucracy, setWastedEfforts] = useState(15);
-            const [improvementIncrease, setImprovementIncrease] = useState(10);
+            const [bureaucraticActivities, setBureaucraticActivities] = useState(15);
+            const [improvementOpportunities, setImprovementOpportunities] = useState(10);
+            const [averageSalary, setAverageSalary] = useState(50000);
+            const [improvementInvestment, setImprovementInvestment] = useState(10000);
 
             const [roi, setRoi] = useState(0);
             const [savings, setSavings] = useState(0);
-            const [cost, setCost] = useState(0);
 
             const chartRef = useRef(null);
             const chartInstance = useRef(null);
 
             const calculateROI = useCallback(() => {
-                const totalWaste = operationalCosts * (bureaucracy / 100);
-                const potentialSavings = totalWaste * (improvementIncrease / 100);
-                const annualCost = employees * 100; // Assuming $100 per employee per year
+                const totalSalaries = employees * averageSalary;
+                const totalWaste = totalSalaries * (bureaucraticActivities / 100);
+                const potentialSavings = totalWaste * (improvementOpportunities / 100);
                 
                 const annualSavings = potentialSavings;
-                const annualROI = (annualSavings - annualCost) / annualCost * 100;
+                const annualROI = (annualSavings - improvementInvestment) / improvementInvestment * 100;
 
                 setRoi(annualROI);
                 setSavings(annualSavings);
-                setCost(annualCost);
 
                 if (chartInstance.current) {
-                    chartInstance.current.data.datasets[0].data = [annualSavings, annualCost];
+                    chartInstance.current.data.datasets[0].data = [annualSavings, improvementInvestment];
                     chartInstance.current.update();
                 }
-            }, [employees, operationalCosts, bureaucracy, improvementIncrease]);
+            }, [employees, bureaucraticActivities, improvementOpportunities, averageSalary, improvementInvestment]);
 
             const debouncedCalculateROI = useCallback(debounce(calculateROI, 500), [calculateROI]);
 
             useEffect(() => {
                 debouncedCalculateROI();
-            }, [employees, operationalCosts, bureaucracy, improvementIncrease, debouncedCalculateROI]);
+            }, [employees, bureaucraticActivities, improvementOpportunities, averageSalary, improvementInvestment, debouncedCalculateROI]);
 
             useEffect(() => {
                 if (chartInstance.current) {
@@ -200,9 +206,9 @@
                 chartInstance.current = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Savings', 'Cost'],
+                        labels: ['Savings', 'Investment'],
                         datasets: [{
-                            data: [savings, cost],
+                            data: [savings, improvementInvestment],
                             backgroundColor: ['#ffc433', '#191919'],
                         }]
                     },
@@ -260,7 +266,7 @@
                         <div className="card-content">
                             <div className="grid">
                                 <div className="input-group">
-                                    <label htmlFor="employees" className="label">Company Size: {employees}</label>
+                                    <label htmlFor="employees" className="label">Number of Employees: {employees}</label>
                                     <input
                                         type="range"
                                         id="employees"
@@ -278,57 +284,78 @@
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="operationalCosts" className="label">Operational Costs: ${operationalCosts.toLocaleString()}</label>
+                                    <label htmlFor="averageSalary" className="label">Average Salary: ${averageSalary.toLocaleString()}</label>
                                     <input
                                         type="range"
-                                        id="operationalCosts"
-                                        min="10000"
-                                        max="10000000"
-                                        step="10000"
-                                        value={operationalCosts}
-                                        onChange={handleInputChange(setOperationalCosts)}
+                                        id="averageSalary"
+                                        min="20000"
+                                        max="200000"
+                                        step="1000"
+                                        value={averageSalary}
+                                        onChange={handleInputChange(setAverageSalary)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
-                                        value={operationalCosts}
-                                        onChange={handleInputChange(setOperationalCosts)}
+                                        value={averageSalary}
+                                        onChange={handleInputChange(setAverageSalary)}
                                         className="input"
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="bureaucracy" className="label">Estimated Bureaucracy*: {bureaucracy}%</label>
+                                    <label htmlFor="bureaucraticActivities" className="label">
+                                        Estimated Time on <a href="https://www.culture-coach.org/detox" target="_blank" rel="noopener noreferrer" className="link">Bureaucratic Activities</a>: {bureaucraticActivities}%
+                                    </label>
                                     <input
                                         type="range"
-                                        id="bureaucracy"
+                                        id="bureaucraticActivities"
                                         min="0"
                                         max="100"
-                                        value={bureaucracy}
-                                        onChange={handleInputChange(setWastedEfforts)}
+                                        value={bureaucraticActivities}
+                                        onChange={handleInputChange(setBureaucraticActivities)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
-                                        value={bureaucracy}
-                                        onChange={handleInputChange(setWastedEfforts)}
+                                        value={bureaucraticActivities}
+                                        onChange={handleInputChange(setBureaucraticActivities)}
                                         className="input"
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="improvementIncrease" className="label">Expected Improvement Increase: {improvementIncrease}%</label>
+                                    <label htmlFor="improvementOpportunities" className="label">Estimated Improvement Opportunities: {improvementOpportunities}%</label>
                                     <input
                                         type="range"
-                                        id="improvementIncrease"
+                                        id="improvementOpportunities"
                                         min="0"
                                         max="100"
-                                        value={improvementIncrease}
-                                        onChange={handleInputChange(setImprovementIncrease)}
+                                        value={improvementOpportunities}
+                                        onChange={handleInputChange(setImprovementOpportunities)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
-                                        value={improvementIncrease}
-                                        onChange={handleInputChange(setImprovementIncrease)}
+                                        value={improvementOpportunities}
+                                        onChange={handleInputChange(setImprovementOpportunities)}
+                                        className="input"
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor="improvementInvestment" className="label">Your Improvement Investment: ${improvementInvestment.toLocaleString()}</label>
+                                    <input
+                                        type="range"
+                                        id="improvementInvestment"
+                                        min="1000"
+                                        max="1000000"
+                                        step="1000"
+                                        value={improvementInvestment}
+                                        onChange={handleInputChange(setImprovementInvestment)}
+                                        className="input"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={improvementInvestment}
+                                        onChange={handleInputChange(setImprovementInvestment)}
                                         className="input"
                                     />
                                 </div>
