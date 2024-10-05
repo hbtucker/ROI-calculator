@@ -162,7 +162,7 @@
         }
 
         function ROICalculator() {
-            const [employees, setEmployees] = useState(100);
+            const [employees, setEmployees] = useState(50);
             const [bureaucraticActivities, setBureaucraticActivities] = useState(15);
             const [improvementOpportunities, setImprovementOpportunities] = useState(10);
             const [averageSalary, setAverageSalary] = useState(50000);
@@ -271,7 +271,7 @@
                                         type="range"
                                         id="employees"
                                         min="1"
-                                        max="10000"
+                                        max="1000"
                                         value={employees}
                                         onChange={handleInputChange(setEmployees)}
                                         className="input"
@@ -288,7 +288,7 @@
                                     <input
                                         type="range"
                                         id="averageSalary"
-                                        min="20000"
+                                        min="40000"
                                         max="200000"
                                         step="1000"
                                         value={averageSalary}
@@ -345,7 +345,7 @@
                                     <input
                                         type="range"
                                         id="improvementInvestment"
-                                        min="1000"
+                                        min="5000"
                                         max="1000000"
                                         step="1000"
                                         value={improvementInvestment}
