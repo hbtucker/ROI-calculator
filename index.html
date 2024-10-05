@@ -162,7 +162,7 @@
         }
 
         function ROICalculator() {
-            const [employees, setEmployees] = useState(50);
+            const [employees, setEmployees] = useState(100);
             const [bureaucraticActivities, setBureaucraticActivities] = useState(15);
             const [improvementOpportunities, setImprovementOpportunities] = useState(10);
             const [averageSalary, setAverageSalary] = useState(50000);
@@ -179,8 +179,8 @@
                 const totalWaste = totalSalaries * (bureaucraticActivities / 100);
                 const potentialSavings = totalWaste * (improvementOpportunities / 100);
                 
-                const annualSavings = potentialSavings;
-                const annualROI = (annualSavings - improvementInvestment) / improvementInvestment * 100;
+                const annualSavings = potentialSavings - improvementInvestment;
+                const annualROI = (annualSavings / improvementInvestment) * 100;
 
                 setRoi(annualROI);
                 setSavings(annualSavings);
@@ -261,7 +261,7 @@
                     <div className="card">
                         <div className="card-header">
                             <h1 className="card-title">ROI Calculator</h1>
-                            <p className="card-subtitle">Estimate the return on investment through improving your culture</p>
+                            <p className="card-subtitle">Calculate your potential return on investment</p>
                         </div>
                         <div className="card-content">
                             <div className="grid">
@@ -271,7 +271,7 @@
                                         type="range"
                                         id="employees"
                                         min="1"
-                                        max="1000"
+                                        max="10000"
                                         value={employees}
                                         onChange={handleInputChange(setEmployees)}
                                         className="input"
@@ -288,7 +288,7 @@
                                     <input
                                         type="range"
                                         id="averageSalary"
-                                        min="40000"
+                                        min="20000"
                                         max="200000"
                                         step="1000"
                                         value={averageSalary}
@@ -345,7 +345,7 @@
                                     <input
                                         type="range"
                                         id="improvementInvestment"
-                                        min="5000"
+                                        min="1000"
                                         max="1000000"
                                         step="1000"
                                         value={improvementInvestment}
@@ -368,16 +368,16 @@
                                     </div>
                                     <div>
                                         <div className="result-item">
-                                            <p className="result-label">Annual ROI</p>
+                                            <p className="result-label">ROI</p>
                                             <p className="result-value">{roi.toFixed(2)}%</p>
                                         </div>
                                         <div className="result-item">
-                                            <p className="result-label">Annual Savings</p>
+                                            <p className="result-label">Savings</p>
                                             <p className="result-value">{formatCurrency(savings)}</p>
                                         </div>
                                         <button
                                             className="btn"
-                                            onClick={() => window.location.href = 'mailto:contact@example.com?subject=ROI%20Calculator%20Inquiry'}
+                                            onClick={() => window.location.href = 'mailto:hello@culture-coach.org?subject=Culture%%20Coach%%20ROI%%20Inquiry'}
                                         >
                                             Connect
                                         </button>
