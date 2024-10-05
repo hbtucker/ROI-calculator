@@ -101,16 +101,18 @@
             position: relative;
         }
         .result-item {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem; /* Reduced from 1rem */
         }
+
         .result-label {
-            font-size: 1.3rem;
             color: #ffc433;
-            font-weight: normal;
+             font-weight: normal;
+            margin-bottom: 0.25rem; /* Added to reduce space between label and value */
         }
         .result-value {
-            font-size: 1.7rem;
+            font-size: 1.875rem;
             font-weight: bold;
+            line-height: 1; /* Added to reduce space below the value */
         }
         .link {
             color: #ffb400;
@@ -122,7 +124,7 @@
         .results-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.2rem;
+            gap: 1.5rem;
             padding-top: 2rem;
         }
         .chart-container {
