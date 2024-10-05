@@ -64,6 +64,32 @@
             border-radius: 0.25rem;
             font-size: 1rem;
         }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffc433;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffc433;
+            cursor: pointer;
+        }
         .results {
             background-color: #191919;
             color: white;
@@ -114,7 +140,19 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
 
         function ROICalculator() {
             const [employees, setEmployees] = useState(100);
@@ -129,7 +167,7 @@
             const chartRef = useRef(null);
             const chartInstance = useRef(null);
 
-            const calculateROI = () => {
+            const calculateROI = useCallback(() => {
                 const totalWaste = operationalCosts * (wastedEfforts / 100);
                 const potentialSavings = totalWaste * (engagementIncrease / 100);
                 const annualCost = employees * 100; // Assuming $100 per employee per year
@@ -140,11 +178,18 @@
                 setRoi(annualROI);
                 setSavings(annualSavings);
                 setCost(annualCost);
-            };
+
+                if (chartInstance.current) {
+                    chartInstance.current.data.datasets[0].data = [annualSavings, annualCost];
+                    chartInstance.current.update();
+                }
+            }, [employees, operationalCosts, wastedEfforts, engagementIncrease]);
+
+            const debouncedCalculateROI = useCallback(debounce(calculateROI, 500), [calculateROI]);
 
             useEffect(() => {
-                calculateROI();
-            }, [employees, operationalCosts, wastedEfforts, engagementIncrease]);
+                debouncedCalculateROI();
+            }, [employees, operationalCosts, wastedEfforts, engagementIncrease, debouncedCalculateROI]);
 
             useEffect(() => {
                 if (chartInstance.current) {
@@ -190,7 +235,7 @@
                         chartInstance.current.destroy();
                     }
                 };
-            }, [savings, cost]);
+            }, []);
 
             const formatCurrency = (value) => {
                 return new Intl.NumberFormat('en-US', {
@@ -201,12 +246,8 @@
                 }).format(value);
             };
 
-            const handleSliderChange = (setter) => (e) => {
+            const handleInputChange = (setter) => (e) => {
                 setter(Number(e.target.value));
-            };
-
-            const handleSliderMouseUp = () => {
-                calculateROI();
             };
 
             return (
@@ -226,18 +267,13 @@
                                         min="1"
                                         max="10000"
                                         value={employees}
-                                        onChange={handleSliderChange(setEmployees)}
-                                        onMouseUp={handleSliderMouseUp}
-                                        onTouchEnd={handleSliderMouseUp}
+                                        onChange={handleInputChange(setEmployees)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
                                         value={employees}
-                                        onChange={(e) => {
-                                            setEmployees(Number(e.target.value));
-                                            calculateROI();
-                                        }}
+                                        onChange={handleInputChange(setEmployees)}
                                         className="input"
                                     />
                                 </div>
@@ -250,18 +286,13 @@
                                         max="10000000"
                                         step="10000"
                                         value={operationalCosts}
-                                        onChange={handleSliderChange(setOperationalCosts)}
-                                        onMouseUp={handleSliderMouseUp}
-                                        onTouchEnd={handleSliderMouseUp}
+                                        onChange={handleInputChange(setOperationalCosts)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
                                         value={operationalCosts}
-                                        onChange={(e) => {
-                                            setOperationalCosts(Number(e.target.value));
-                                            calculateROI();
-                                        }}
+                                        onChange={handleInputChange(setOperationalCosts)}
                                         className="input"
                                     />
                                 </div>
@@ -273,18 +304,13 @@
                                         min="0"
                                         max="100"
                                         value={wastedEfforts}
-                                        onChange={handleSliderChange(setWastedEfforts)}
-                                        onMouseUp={handleSliderMouseUp}
-                                        onTouchEnd={handleSliderMouseUp}
+                                        onChange={handleInputChange(setWastedEfforts)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
                                         value={wastedEfforts}
-                                        onChange={(e) => {
-                                            setWastedEfforts(Number(e.target.value));
-                                            calculateROI();
-                                        }}
+                                        onChange={handleInputChange(setWastedEfforts)}
                                         className="input"
                                     />
                                 </div>
@@ -296,18 +322,13 @@
                                         min="0"
                                         max="100"
                                         value={engagementIncrease}
-                                        onChange={handleSliderChange(setEngagementIncrease)}
-                                        onMouseUp={handleSliderMouseUp}
-                                        onTouchEnd={handleSliderMouseUp}
+                                        onChange={handleInputChange(setEngagementIncrease)}
                                         className="input"
                                     />
                                     <input
                                         type="number"
                                         value={engagementIncrease}
-                                        onChange={(e) => {
-                                            setEngagementIncrease(Number(e.target.value));
-                                            calculateROI();
-                                        }}
+                                        onChange={handleInputChange(setEngagementIncrease)}
                                         className="input"
                                     />
                                 </div>
