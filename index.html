@@ -5,37 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ROI Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/recharts@2.1.12/umd/Recharts.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        poppins: ['Poppins', 'sans-serif'],
-                    },
-                },
-            },
+    <script src="https://unpkg.com/recharts@2.6.2/umd/Recharts.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
         }
-    </script>
-    <style type="text/tailwindcss">
-        @layer components {
-            .btn {
-                @apply bg-[#ffc433] text-[#191919] hover:bg-[#e6b02e] px-8 py-3 text-lg font-semibold rounded-md transition-colors duration-200;
-            }
-            .input {
-                @apply w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#ffc433];
-            }
-            .label {
-                @apply block text-sm font-medium text-gray-700 mb-1;
+        .container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 56rem;
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #191919;
+            color: white;
+            padding: 1.5rem;
+        }
+        .card-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .card-subtitle {
+            color: #ffc433;
+            margin-top: 0.5rem;
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        .results {
+            background-color: #191919;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .result-item {
+            margin-bottom: 1rem;
+        }
+        .result-label {
+            color: #ffc433;
+            font-weight: bold;
+        }
+        .result-value {
+            font-size: 1.875rem;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #ffc433;
+            color: #191919;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: #e6b02e;
+        }
+        @media (min-width: 768px) {
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
             }
         }
     </style>
 </head>
-<body class="bg-[#f6f6f6] font-poppins">
+<body>
     <div id="root"></div>
 
     <script type="text/babel">
@@ -86,15 +161,15 @@
             };
 
             return (
-                <div className="min-h-screen flex items-center justify-center p-4">
-                    <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
-                        <div className="bg-[#191919] text-white p-6">
-                            <h1 className="text-3xl font-bold">ROI Calculator</h1>
-                            <p className="text-[#ffc433]">Calculate your potential return on investment</p>
+                <div className="container">
+                    <div className="card">
+                        <div className="card-header">
+                            <h1 className="card-title">ROI Calculator</h1>
+                            <p className="card-subtitle">Calculate your potential return on investment</p>
                         </div>
-                        <div className="p-6 space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
+                        <div className="card-content">
+                            <div className="grid">
+                                <div className="input-group">
                                     <label htmlFor="employees" className="label">Number of Employees: {employees}</label>
                                     <input
                                         type="range"
@@ -103,16 +178,16 @@
                                         max="10000"
                                         value={employees}
                                         onChange={(e) => setEmployees(Number(e.target.value))}
-                                        className="w-full"
+                                        className="input"
                                     />
                                     <input
                                         type="number"
                                         value={employees}
                                         onChange={(e) => setEmployees(Number(e.target.value))}
-                                        className="input mt-2"
+                                        className="input"
                                     />
                                 </div>
-                                <div>
+                                <div className="input-group">
                                     <label htmlFor="operationalCosts" className="label">Operational Costs: ${operationalCosts.toLocaleString()}</label>
                                     <input
                                         type="range"
@@ -122,16 +197,16 @@
                                         step="10000"
                                         value={operationalCosts}
                                         onChange={(e) => setOperationalCosts(Number(e.target.value))}
-                                        className="w-full"
+                                        className="input"
                                     />
                                     <input
                                         type="number"
                                         value={operationalCosts}
                                         onChange={(e) => setOperationalCosts(Number(e.target.value))}
-                                        className="input mt-2"
+                                        className="input"
                                     />
                                 </div>
-                                <div>
+                                <div className="input-group">
                                     <label htmlFor="wastedEfforts" className="label">Estimated Wasted Efforts: {wastedEfforts}%</label>
                                     <input
                                         type="range"
@@ -140,16 +215,16 @@
                                         max="100"
                                         value={wastedEfforts}
                                         onChange={(e) => setWastedEfforts(Number(e.target.value))}
-                                        className="w-full"
+                                        className="input"
                                     />
                                     <input
                                         type="number"
                                         value={wastedEfforts}
                                         onChange={(e) => setWastedEfforts(Number(e.target.value))}
-                                        className="input mt-2"
+                                        className="input"
                                     />
                                 </div>
-                                <div>
+                                <div className="input-group">
                                     <label htmlFor="engagementIncrease" className="label">Expected Engagement Increase: {engagementIncrease}%</label>
                                     <input
                                         type="range"
@@ -158,20 +233,20 @@
                                         max="100"
                                         value={engagementIncrease}
                                         onChange={(e) => setEngagementIncrease(Number(e.target.value))}
-                                        className="w-full"
+                                        className="input"
                                     />
                                     <input
                                         type="number"
                                         value={engagementIncrease}
                                         onChange={(e) => setEngagementIncrease(Number(e.target.value))}
-                                        className="input mt-2"
+                                        className="input"
                                     />
                                 </div>
                             </div>
-                            <div className="bg-[#191919] text-white p-6 rounded-lg">
-                                <h3 className="text-2xl font-bold mb-4">Your ROI</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                                    <div className="h-80 md:h-96">
+                            <div className="results">
+                                <h3 className="results-title">Your ROI</h3>
+                                <div className="grid">
+                                    <div style={{ height: '300px' }}>
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
                                                 <Pie
@@ -212,16 +287,16 @@
                                         </ResponsiveContainer>
                                     </div>
                                     <div>
-                                        <div className="mb-4">
-                                            <p className="text-[#ffc433] font-bold">Annual ROI</p>
-                                            <p className="text-3xl font-bold">{roi.toFixed(2)}%</p>
+                                        <div className="result-item">
+                                            <p className="result-label">Annual ROI</p>
+                                            <p className="result-value">{roi.toFixed(2)}%</p>
                                         </div>
-                                        <div className="mb-4">
-                                            <p className="text-[#ffc433] font-bold">Annual Savings</p>
-                                            <p className="text-3xl font-bold">{formatCurrency(savings)}</p>
+                                        <div className="result-item">
+                                            <p className="result-label">Annual Savings</p>
+                                            <p className="result-value">{formatCurrency(savings)}</p>
                                         </div>
                                         <button
-                                            className="btn w-full mt-4"
+                                            className="btn"
                                             onClick={() => window.location.href = 'mailto:contact@example.com?subject=ROI%20Calculator%20Inquiry'}
                                         >
                                             Connect
