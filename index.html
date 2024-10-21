@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ROI Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -151,6 +152,35 @@
             .results-info {
                 flex: 1;
             }
+        }
+        .info-icon {
+            color: #ffc433;
+            margin-left: 5px;
+            cursor: help;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
@@ -316,7 +346,11 @@
                                 </div>
                                 <div className="input-group">
                                     <label htmlFor="bureaucraticActivities" className="label">
-                                        Estimated Time on <a href="https://www.culture-coach.org/detox" target="_blank" rel="noopener noreferrer" className="link">Ineffective or Wasteful Practices</a>: {bureaucraticActivities}%
+                                        Estimated Time on <a href="https://www.culture-coach.org/detox" target="_blank" rel="noopener noreferrer" className="link">Ineffective Practices</a>: {bureaucraticActivities}%
+                                        <span className="tooltip">
+                                            <i className="fas fa-info-circle info-icon"></i>
+                                            <span className="tooltiptext">The percentage of time spent on activities that don't create value for the business or customers.</span>
+                                        </span>
                                     </label>
                                     <input
                                         type="range"
@@ -335,7 +369,13 @@
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="improvementOpportunities" className="label">Estimated Improvement Opportunity: {improvementOpportunities}%</label>
+                                    <label htmlFor="improvementOpportunities" className="label">
+                                        Estimated Improvement Opportunity: {improvementOpportunities}%
+                                        <span className="tooltip">
+                                            <i className="fas fa-info-circle info-icon"></i>
+                                            <span className="tooltiptext">The potential impact of improvements through better practices.</span>
+                                        </span>
+                                    </label>
                                     <input
                                         type="range"
                                         id="improvementOpportunities"
@@ -353,7 +393,7 @@
                                     />
                                 </div>
                                 <div className="input-group">
-                                    <label htmlFor="improvementInvestment" className="label">Your Improvement Investment: ${improvementInvestment.toLocaleString()}</label>
+                                    <label htmlFor="improvementInvestment" className="label">Your Investment in Improvements: ${improvementInvestment.toLocaleString()}</label>
                                     <input
                                         type="range"
                                         id="improvementInvestment"
