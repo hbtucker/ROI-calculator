@@ -64,7 +64,6 @@
             border-radius: 0.25rem;
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
-            
         }
         input[type="range"] {
             -webkit-appearance: none;
@@ -101,19 +100,18 @@
             position: relative;
         }
         .result-item {
-            margin-bottom: 0.5rem; /* Reduced from 1rem */
+            margin-bottom: 0.5rem;
         }
-
         .result-label {
             font-size: 1.2rem;
             color: #ffc433;
             font-weight: normal;
-            margin-bottom: 0.25rem; /* Added to reduce space between label and value */
+            margin-bottom: 0.25rem;
         }
         .result-value {
             font-size: 1.875rem;
             font-weight: bold;
-            line-height: 1; /* Added to reduce space below the value */
+            line-height: 1;
         }
         .link {
             color: #ffb400;
@@ -123,13 +121,14 @@
             text-decoration: underline;
         }
         .results-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
-            padding-top: 2rem;
         }
         .chart-container {
-            height: 260px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
         }
         .results-info {
             display: flex;
@@ -141,6 +140,16 @@
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1.5rem;
+            }
+            .results-grid {
+                flex-direction: row;
+            }
+            .chart-container {
+                flex: 1;
+                max-width: none;
+            }
+            .results-info {
+                flex: 1;
             }
         }
     </style>
@@ -216,6 +225,7 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: {
                                 position: 'bottom',
